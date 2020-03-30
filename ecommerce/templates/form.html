@@ -1,0 +1,16 @@
+
+{% extends 'base.html' %}
+{% block content %}
+{% if user.is_authenticated %}
+<div class="col-sm-6 offset-3">
+<h1>You are logged in, keep shoping</h1>
+</div>
+{% else %}
+<div class="col-sm-6 offset-3">
+<form class="form-group" method="POST" action='' > {% csrf_token %}
+{{ form.as_p }}
+<input class="btn btn-dark" type="submit" value="{{ btn }}" />
+</form>
+</div>
+{% endif %}
+{% endblock %}

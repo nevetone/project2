@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="row">
+        {% if address_form %}
+<div class="col-sm-6">
+<h3> Add new Address </h3>
+<form method="POST" class="form-group address-form" action='{% url "ajax_add_user_address" %}?next=checkout'> {% csrf_token %}
+        {{ address_form.as_p }}
+<input type="submit" value="Add Address" class="btn btn-dark" />
+</form>
+</div>
+{% endif %}
+</div>
+
+
+
+<div class="row">
+<form meethod="POST" action="" style="width:100%" id="payment-form"> {% csrf_token %}
+<div class="col-sm-6 float-right">
+<h3> Credit info </h3>
+
+{% if address_form %}
+
+Payment Form
+
+{% else %}
+
+{% endif %}
+</div>
+
+
+        {% if current_addresses %}
+<div class="col-sm-6">
+<h3> Saved Addresses </h3>
+        {% for address in current_addresses %}
+                {% if request.user.userdefaultaddress.shipping.id == address.id %} 
+        <input type="radio" name="shipping_address" value="{{ address.id }}" checked class="form-check-input" />
+                {{ address.get_address }} <br />
+                {% else %}
+        <input type="radio" name="shipping_address" value="{{ address.id }}" class="form-check-input" />
+                {{ address.get_address }} <br />
+                {% endif %}
+        {% endfor %}
+</div>
+        {% endif %}
+        {% if billing_addresses %}
+<div class="col-sm-6 billing_address">
+<h3> Saved billing Addresses </h3>
+        {% for address in billing_addresses %}
+                {% if request.user.userdefaultaddress.billing.id == address.id %} 
+        <input type="radio" name="billing_address" value="{{ address.id }}" checked class="form-check-input" />
+                {{ address.get_address }} <br />
+                {% else %}
+        <input type="radio" name="billing_address" value="{{ address.id }}" class="form-check-input" />
+                {{ address.get_address }} <br />
+                {% endif %}
+        {% endfor %}
+</div>
+        {% endif %}
+        </div>
+</form>
+</div>
+{% endblock content %}

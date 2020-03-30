@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<div class="row">
+
+{% for product in products %}
+
+<div class="col-sm-3" style="margin-bottom:1%;">
+<div class="img-thumbnail" style="width:95%; margin:0 auto;">
+{% if product.productimage_set.all %}
+{% for item in product.productimage_set.all %}
+{% if item.featured %}
+<a href="{{ product.get_absolute_url }}">
+<div 
+style="
+height:15vh; 
+background-color:white; 
+margin:0 auto; 
+display:block;
+background-image:url('{{ item.image.url }}');
+background-repeat:no-repeat;
+background-size:cover;
+background-position:center;
+">
+
+</div></a>
+{% endif %}
+{% endfor %}
+{% else %}
+<img class="w-100 h-25" src="{% static "img/placeholder.png" %}" />
+{% endif %}
+<div class="caption">
+<a href="{{ product.get_absolute_url }}" ><h3>{{ product.title }} | {{ product.price }}$</h3></a>
+<p>{{ product.description|truncatewords:15 }}</p>
+<p>
+<a href="{{ product.get_absolute_url }}" class="btn btn-info btn-xs" style="margin-left:1%;" role="button">View</a>
+</div>
+</div>
+</div>
+{% cycle "" "" "" "" "</div><br><hr /><div class='row'>" %}
+{% endfor %}
+
+</div>
+
+
+
+{% endblock %}

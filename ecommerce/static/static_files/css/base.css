@@ -1,0 +1,35 @@
+.carousel-inner{
+background-color:#343a40;
+box-sizing:border-box;
+border: 5px inset #1C6EA4;
+border-radius: 31px;
+box-shadow: 2px 2px 33px -1px #000000;
+}
+.modal-dialog{
+margin-top:15%;
+}
+.sec-form{
+border-top:2px solid black;
+position:relative;
+}
+.sec-form > .billing_address{
+position:absolute;
+left:50%;
+top:0;
+
+}
+.address-form input[type=text]{
+position:absolute;
+left:22%;
+}
+.address-form select{
+position:absolute;
+left:22%;
+}
+.address-form label {
+font-size: 15px;
+}
+
+.address-form {
+    position:relative;
+}

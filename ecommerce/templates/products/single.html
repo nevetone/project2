@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="row">
+<div class="col-sm-4">
+{% for img in images %}
+{% if img.featured %}
+
+<div class="col-xs-12">
+<img class="img-fluid" src="{{ img.image.url }}" />
+<hr/>
+</div>
+
+{% endif %}
+{% endfor %}
+<div class="row">
+{% for img in images %}
+{% if not img.featured %}
+<div class="col-sm-4">
+<a href="#"  >
+<img class="img-fluid img-thumbnail" style="height:10%" src="{{ img.image.url }}" />
+</a>
+</div>
+{% endif %}
+{% endfor %}
+</div>
+
+</div>
+<div class="col-sm-8">
+<div class="col-sm-8 float-left">
+<h1>
+{{ product.title }} 
+</h1>
+</div>
+
+<div class="col-sm-4 float-right" style="z-index:2;">
+
+<form  class="form text-center"  method="POST" action="{% url "add_to_cart" product.slug %}">
+{% csrf_token %}
+<input type="submit" class="btn btn-info btn-block" value="Add to Cart" />
+<input name="qty" class="form-control" type="number" value="1" min="1" />
+
+{% if product.variation_set.all %}
+{% if product.variation_set.sizes %}
+<select class="form-control" name="size" >
+{% for item in product.variation_set.sizes %}
+<option value="{{ item.title|lower }}">{{ item.title|capfirst }}</option>
+{% endfor %}
+</select>
+{% endif %}
+{% if product.variation_set.color %}
+<select class="form-control" name="color" >
+{% for item in product.variation_set.color %}
+<option value="{{ item.title|lower }}">{{ item.title|capfirst }}</option>
+{% endfor %}
+</select>
+{% endif %}
+{% endif %}
+</form>
+
+</div>
+
+
+<div class="col-sm-12">
+
+Price: {{ product.price }}$<br/>
+
+Shipping: Free with $25+ pucharse.
+
+<hr/>
+</div>
+<div class="col-sm-12">
+{{ product.description|linebreaks }}
+</div>
+</div>
+</div>
+
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% comment %} 
+
+<div class="page-header">
+<h1> {{ product.title }}</h1>
+</div>
+<div class="row">
+<div class="col-sm-4" >
+{% for img in images %}
+{% if img.featured %}
+    <img class="w-100"   src="{{ img.image.url }}" alt="{{ product.title }}" />
+{% endif %}
+{% endfor %}
+<div class="row" style="margin-top:30px">
+{% for img in images %}
+{% if img.featured is not True %}
+<div class="col-sm">
+    <img class="d-block w-100"  src="{{ img.image.url }}" alt="{{ product.title }}" />
+</div>
+{% endif %}
+{% endfor %}
+</div>
+</div>
+<div class="col-sm-8">
+{{ product.description|linebreaks }}
+</div>
+</div> {% endcomment %}

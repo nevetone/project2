@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load static %}
+
+<table class="table">
+<thead>
+<th></th>
+<th>Product</th>
+</thead>
+<tbody>
+{% for product in products %}
+<tr>
+    <td style="width:160px; height:160px">
+    {% if product.productimage_set.all %}
+    {% for item in product.productimage_set.all %}
+    {% if item.featured %}
+    <a href="{{ product.get_absolute_url }}" >
+    <div style="
+    height:100%; 
+    widht:100%; 
+    background-size:cover; 
+    background-image:url('{{ item.image.url }}');
+    background-repeat:no-repeat; 
+    background-position:center;" ></div></a>
+    {% endif %}
+    {% endfor %}
+    {% else %}
+    <a href="{{ product.get_absolute_url }}" >
+    <div style="
+    height:100%; 
+    widht:100%; 
+    background-size:cover; 
+    backgrount-image:url('{% static "img/placeholder.png" %}'); 
+    background-repeat:no-repeat; 
+    background-position:center;" ></div></a>
+    {% endif %}
+    </td>
+    <td>
+    <a href="{{ product.get_absolute_url }}">
+        {{ product }}
+    </a>
+    </td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+
+
+{% endblock %}

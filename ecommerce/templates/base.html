@@ -1,0 +1,143 @@
+<!doctype html>
+{% load static %}
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="/docs/4.0/assets/img/favicons/favicon.ico">
+    <title>Shop</title>
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <!-- Custom styles for this template -->
+    <link href="https://getbootstrap.com/docs/4.0/examples/navbar-static/navbar-top.css" rel="stylesheet">
+    <link rel="shortcut icon" type="image/png" href="{% static 'img/favicon.ico' %}"/>
+    <link rel="stylesheet" href="{% static 'css/base.css' %}" type="text/css" >
+    <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+    <script src="https://js.stripe.com/v3/"></script>
+    <script src="{% static "js/js.js" %}" ></script>
+  </head>
+<body>
+
+{% if request.session.marketing_message %}
+<div class="alert alert-dark alert-dismissible fade show" style="text-align:center; margin:0; padding:2px;" role="alert">
+{{ request.session.marketing_message|safe }}
+<button id="marketing-message-btn" type="button" class="close" style="position:absolute; top:-50%;" data-dismiss="alert" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</div>
+{% endif %}
+
+{% include 'navbar.html' %}
+
+{% if messages %}
+{% for message in messages %}
+<div class="alert alert-success alert-dismissible fade show" style="text-align:center;" role="alert">
+  {{ message }}
+<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</div>
+{% endfor %}
+{% endif %}
+
+
+
+{% block jumbotron %}
+{% endblock %}
+
+
+
+<div class = "container-lg">
+{% block content %}
+
+
+
+{% endblock %}
+</div>
+
+
+
+{% include 'modal.html' %}
+
+
+
+
+
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://getbootstrap.com/docs/4.0/assets/js/vendor/popper.min.js"></script>
+    <script src="https://getbootstrap.com/docs/4.0/dist/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+<script>
+
+$(document).ready(function(){
+  $("#marketing-message-btn").click(function(){
+    $.ajax({
+      type: "POST",
+      url: "{% url 'dismiss_marketing_message' %}",
+      data: {
+        "dimiss-marketing": true,
+        "csrfmiddlewaretoken": "{{ csrf_token }}",
+      },
+      success: function(data){
+      },
+      error: function(){
+        alert("Error, Please try it later")
+      },
+    });
+  });
+
+
+{% if not request.user.is_authenticated and not request.session.email_added_marketing and not "accounts" in request.get_full_path %}
+  function showModal(){
+    $('#exampleModal').modal("show")
+  };
+  setTimeout(showModal, 5000);
+
+$("#sendMarketingForm").click(function(e){
+    e.preventDefault(); //true
+    var mForm = $('#sendForm').serialize();
+
+    $.ajax({
+      type: "POST",
+      url: "{% url 'ajax_email_signup' %}",
+      data: mForm,
+      success: function(data){
+        $("#modalError").html("<p style=\"color:green\"> " + data + " </p>");
+        $('#exampleModal').modal("hide")
+      },
+      error: function(data){
+        var obj = data.responseJSON;
+        $("#modalError").html("<p style=\"color:red\">" + obj.email + "</p>");
+      },
+    });
+
+  });
+  {% endif %}
+
+});
+</script>
+
+<script>
+
+$(document).ready(function(){
+
+{% block jquery %}
+{% endblock jquery %}
+
+});
+
+</script>
+
+
+</body>
+</html>
