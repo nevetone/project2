@@ -44,7 +44,7 @@ if DEBUG:
 
 
 
-ALLOWED_HOSTS = ['192.168.1.28',]
+ALLOWED_HOSTS = ['*',]
 
 TEMPLATE_DIRS = [ 
     os.path.join(BASE_DIR, 'templates'),
